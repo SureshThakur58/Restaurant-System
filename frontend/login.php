@@ -72,11 +72,13 @@ if(isset($_POST['login'])){
 
 <body>
     <div class="account_page">
+           
         
         <div class="header">
             <div class="container1">
                 <h1 style="margin: 15px;">Welcome to <span style="font-size: 50px; color: #cda45e;">Restro Nepal</span></h1>
             </div>
+           
             <div class="form-container2">
                 <div class="form-btn">
                     <span onclick="register()">Register</span>
@@ -84,18 +86,18 @@ if(isset($_POST['login'])){
                     <hr id="indicator">
                 </div>
 
-                <form id="Loginform" method="POST" action="<?php $_SERVER['PHP_SELF']; ?>">
-                    <input type="email" name="email" placeholder="email" required>
-                    <input type="password" name="password" placeholder="password" required>
-                    <input id="btn" type="submit" name="login" value="Login">
+                <form id="Loginform" method="POST" action="<?php $_SERVER['PHP_SELF']; ?>" onsubmit="return validateLoginForm(); ">
+                    <input type="email" id="loginEmail" name="email"  placeholder="email" required>
+                    <input type="password" id="loginPassword" name="password"  placeholder="password" required>
+                    <input id="btn" type="submit" name="login" value="Login" >
                     <a href="#">Forgot password</a>
                 </form>
-                <form id="Regform" method="POST" action="<?php $_SERVER['PHP_SELF']; ?>">
+                <form id="Regform" method="POST" action="<?php $_SERVER['PHP_SELF']; ?>" onsubmit="return validateRegForm();">
                     <input type="text" name="fullname" placeholder="Fullname" required>
-                    <input type="email" name="email" placeholder="email" required>
-                    <input type="password" name="password" placeholder="password" required >
+                    <input type="email" id="regEmail" name="email" placeholder="email" required>
+                    <input type="password" id="regPassword" name="password" placeholder="password" required >
                      
-                    <input id="btn" type="submit" name="register" value="Register">
+                    <input id="btn" type="submit" name="register" value="Register" >
                 </form>
             </div>
         </div>
@@ -126,6 +128,100 @@ if(isset($_POST['login'])){
        
     </script>
     
+
+
+    <script>
+function validateLoginForm() {
+    var email = document.getElementById("loginEmail").value;
+    var password = document.getElementById("loginPassword").value;
+
+    // Email validation using a simple regular expression
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        alert("Invalid Email Address");
+        return false;
+    }
+
+    // Password length should be at least 8 characters
+    if (password.length < 8) {
+        alert("Password must be at least 8 characters long");
+        return false;
+    }
+
+    // Password should contain at least one uppercase letter
+    if (!/[A-Z]/.test(password)) {
+        alert("Password must contain at least one uppercase letter");
+        return false;
+    }
+
+    // Password should contain at least one lowercase letter
+    if (!/[a-z]/.test(password)) {
+        alert("Password must contain at least one lowercase letter");
+        return false;
+    }
+
+    // Password should contain at least one digit
+    if (!/\d/.test(password)) {
+        alert("Password must contain at least one digit");
+        return false;
+    }
+
+    // Password should contain at least one special character
+    if (!/[!@#$%^&*()\-_=+{};:,<.>]/.test(password)) {
+        alert("Password must contain at least one special character");
+        return false;
+    }
+
+    // All validation checks passed
+    return true;
+}
+
+function validateRegForm() {
+    var email = document.getElementById("regEmail").value;
+    var password = document.getElementById("regPassword").value;
+
+    // Email validation using a simple regular expression
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        alert("Invalid Email Address");
+        return false;
+    }
+
+    // Password length should be at least 8 characters
+    if (password.length < 8) {
+        alert("Password must be at least 8 characters long");
+        return false;
+    }
+
+    // Password should contain at least one uppercase letter
+    if (!/[A-Z]/.test(password)) {
+        alert("Password must contain at least one uppercase letter");
+        return false;
+    }
+
+    // Password should contain at least one lowercase letter
+    if (!/[a-z]/.test(password)) {
+        alert("Password must contain at least one lowercase letter");
+        return false;
+    }
+
+    // Password should contain at least one digit
+    if (!/\d/.test(password)) {
+        alert("Password must contain at least one digit");
+        return false;
+    }
+
+    // Password should contain at least one special character
+    if (!/[!@#$%^&*()\-_=+{};:,<.>]/.test(password)) {
+        alert("Password must contain at least one special character");
+        return false;
+    }
+
+    // All validation checks passed
+    return true;
+}
+</script>
+
 
 </body>
 

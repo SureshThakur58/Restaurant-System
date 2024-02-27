@@ -34,3 +34,9 @@ window.addEventListener('load', headerScrolled);
 
 // Event listener for the scroll event
 window.addEventListener('scroll', headerScrolled);
+
+
+
+
+
+

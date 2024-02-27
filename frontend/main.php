@@ -6,6 +6,13 @@ if(!isset($_SESSION['login']) || ($_SESSION['login'])!=true){
   header("location:login.php");
 }
 ?>
+
+<?php
+include("connect.php");
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +26,7 @@ if(!isset($_SESSION['login']) || ($_SESSION['login'])!=true){
     
     <!-- Google Fonts -->
      <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
+     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
   <div id="topbar" class="d-flex align-items-center fixed-top"> </div>
@@ -149,7 +156,7 @@ if(!isset($_SESSION['login']) || ($_SESSION['login'])!=true){
      
      
 <?php
-include "connect.php";
+
 
 // SQL query to retrieve menu items
 $sql = "SELECT * FROM menu";
@@ -289,7 +296,103 @@ $result=mysqli_query($conn,$sql);
 
  <!-- ======= Book A Table Section ======= -->
 
-     include "reservation.php";
+ 
+<?php
+// Function to sanitize form data
+function sanitizeData($data)
+{
+  return htmlspecialchars(stripslashes(trim($data)));
+}
+
+// Check if the form is submitted
+if (isset($_POST["submits"])) {
+  // Sanitize form data
+  $name = sanitizeData($_POST["name"]);
+  $email = sanitizeData($_POST["email"]);
+  $phone = sanitizeData($_POST["phone_number"]);
+  $date = date('Y-m-d', strtotime(sanitizeData($_POST["date"])));
+  $time = sanitizeData($_POST["time"]);
+  $people = sanitizeData($_POST["no_of_people"]);
+  $message = sanitizeData($_POST["message"]);
+
+  // //when submit button clicked
+  //     if (isset($_POST["submit"])) {
+  //         
+  //         $name = $_POST["name"];
+  //         $email = $_POST["email"];
+  //         $phone = $_POST["phone_number"];
+  //         $date = $_POST["date"];
+  //         $time = $_POST["time"];
+  //         $people = $_POST["no_of_people"];
+  //         $message = $_POST["message"];
+
+  // SQL query to insert data into the table
+  $sql = "INSERT INTO book_a_table (name, email, phone_number, no_of_people, date, time, message)
+            VALUES ('$name', '$email', '$phone', '$people','$date', '$time', '$message')";
+  $result = mysqli_query($conn, $sql);
+  if ($result == TRUE) {
+    echo "<script>alert('Your booking request was sent. We will call back or send an Email to confirm your reservation. Thank you!');</script>";
+  }
+  else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+
+}
+?>
+
+
+  <section id="book-a-table" class="book-a-table">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Reservation</h2>
+        <p>Book a Table</p>
+      </div>
+
+      <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 form-group">
+            <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required data-rule="minlen:4" data-msg="Please enter at least 4 chars">
+            <div class="validate"></div>
+          </div>
+          <div class="col-lg-4 col-md-6 form-group mt-3 mt-md-0">
+            <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required data-rule="email" data-msg="Please enter a valid email">
+            <div class="validate"></div>
+          </div>
+          <div class="col-lg-4 col-md-6 form-group mt-3 mt-md-0">
+            <input type="text" class="form-control" name="phone_number" id="phone_number" placeholder="Your Phone" required data-rule="minlen:4" data-msg="Please enter at least 4 chars">
+            <div class="validate"></div>
+          </div>
+          <div class="col-lg-4 col-md-6 form-group mt-3">
+            <input type="text" name="date" class="form-control" id="datepicker" placeholder="Date" >
+            <div class="validate"></div>
+          </div>
+          <div class="col-lg-4 col-md-6 form-group mt-3">
+            <input type="time" class="form-control" name="time" id="timeInput" min="09:00" max="22:00" placeholder="Time" required data-rule="minlen:4" data-msg="Please enter at least 4 chars">
+            <div class="validate"></div>
+          </div>
+          <div class="col-lg-4 col-md-6 form-group mt-3">
+            <input type="number" class="form-control" name="no_of_people" id="people" placeholder="# of people" required data-rule="minlen:1" data-msg="Please enter at least 1 chars">
+            <div class="validate"></div>
+          </div>
+        </div>
+        <div class="form-group mt-3">
+          <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+          <div class="validate"></div>
+        </div>
+        <div class="mb-3">
+          <div class="loading">Loading</div>
+          <div class="error-message"></div>
+          <div class="sent-message">Your booking request was sent. We will call back or send an Email to confirm your reservation. Thank you!</div>
+        </div>
+        <div class="text-center"><button type="submit" name="submits">Book a Table</button></div>
+
+
+      </form>
+    </div>
+    </div>
+  </section>
+
 
 
  <!-- End Book A Table Section -->
@@ -383,7 +486,7 @@ $result=mysqli_query($conn,$sql);
 <!-- ======= Contact Section ======= -->
 
 <?php
-include "connect.php";
+
 
 
 // Check if the form is submitted
@@ -554,8 +657,56 @@ if (isset($_POST["submit"])) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  
+  
+  
+  
+<!-- JavaScript code to handle time selection and limit-->
 
- 
+  <script>
+
+// Get the time input element
+const timeInput = document.getElementById('timeInput');
+
+// Add event listener to validate the selected time
+timeInput.addEventListener('change', function() {
+    const selectedTime = timeInput.value;
+    
+    // Convert selected time to hours and minutes
+    const selectedHour = parseInt(selectedTime.split(':')[0]);
+    
+    // Check if selected time is within the allowed range
+    if (selectedHour < 9 || selectedHour >= 22) {
+        alert('Please select a time between 9:00 AM and 10:00 PM.');
+        timeInput.value = ''; // Reset the input value
+    }
+});
+</script>
+
+
+<!--  JavaScript code to handle date selection and limit-->
+
+<script>
+$(document).ready(function() {
+    // Get current date
+    var currentDate = new Date();
+    
+    // Calculate recent date (today)
+    var recentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+    
+    // Calculate future date (2 days from today)
+    var futureDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 2);
+    
+    // Initialize date picker
+    $('#datepicker').datepicker({
+        dateFormat: 'mm/dd/yy', // Date format: mm/dd/yy
+        minDate: recentDate,    // Minimum selectable date
+        maxDate: futureDate     // Maximum selectable date
+    });
+});
+</script>
 
 </body>
 </html>

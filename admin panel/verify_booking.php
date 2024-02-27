@@ -48,14 +48,17 @@ if (mysqli_num_rows($result) > 0) {
 
             // Send email
             if (mail($to, $subject, $message)) {
-                echo "Email sent successfully to " . $to . "<br>";
+                echo "<script>alert('Email sent successfully!') </script> " ;
+                header("location:viewTableBooked.php"); 
             } else {
-                echo "Failed to send email to " . $to . "<br>";
+                echo "<script>alert('Failed to send email!')  </script>" ;
+                header("location:viewTableBooked.php"); 
             }
+           
         }
     }
 } else {
-    echo "No bookings found.";
+    echo "<script>alert('No bookings found!');  </script>";
 }
 
 // Close the database connection
